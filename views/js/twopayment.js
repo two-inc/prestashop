@@ -139,9 +139,9 @@ class Twopayment {
     static setInternationalPhoneDropDown(id_country)
     {
         if(id_country == 23 || id_country == '23'){
-            var cnstr = '"no", "gb"';
+            var cnstr = '"no", "gb", "se"';
         } else {
-            var cnstr = '"gb", "no"';
+            var cnstr = '"gb", "no", "se"';
         }
         const phoneInputField = document.querySelector("input[name='phone']");
         const phoneInput = window.intlTelInput(phoneInputField, {
