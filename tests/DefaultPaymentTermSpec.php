@@ -240,6 +240,8 @@ final class DefaultPaymentTermSpec
     {
         StubStore::reset();
         self::configureMerchantIdentity();
+        // A record fetched before: only that one has a full-TTL clock to roll back.
+        Configuration::updateValue(Twopayment::CONFIG_MERCHANT_INVOICE_DISTRIBUTED, '0');
         // 500 with no body: a failed fetch.
         $module = self::moduleWithMerchantResponse(array('http_status' => 500));
 

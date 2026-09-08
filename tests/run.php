@@ -4995,7 +4995,10 @@ final class OrderBuilderSpec
         Configuration::updateValue('PS_TWO_MERCHANT_API_KEY', 'key');
         $module = self::fetchHarness();
         $expire = static function () {
-            Configuration::updateValue(Twopayment::CONFIG_MERCHANT_AVAILABLE_TERMS_TS, time() - 901);
+            Configuration::updateValue(
+                Twopayment::CONFIG_MERCHANT_AVAILABLE_TERMS_TS,
+                time() - Twopayment::MERCHANT_AVAILABLE_TERMS_TTL - 1
+            );
         };
 
         // First refresh: normalised (ints, dedup, non-positive dropped, non-numeric
@@ -5004,7 +5007,7 @@ final class OrderBuilderSpec
         TinyAssert::same([30, 60, 90], $module->getMerchantAvailableTerms(true));
         TinyAssert::same(1, $module->calls);
 
-        // Within the TTL: served from cache, no request; cache-only reads agree.
+        // Within the backstop: served from cache, no request; cache-only reads agree.
         TinyAssert::same([30, 60, 90], $module->getMerchantAvailableTerms(true));
         TinyAssert::same([30, 60, 90], $module->getMerchantAvailableTerms());
         TinyAssert::same(1, $module->calls);
@@ -5036,7 +5039,10 @@ final class OrderBuilderSpec
         // says nothing is offerable) - distinct from a failure serving stale.
         $module->responses[] = ['http_status' => 200, 'available_terms' => [30, 60]];
         TinyAssert::same([30, 60], $module->getMerchantAvailableTerms(true));
-        Configuration::updateValue(Twopayment::CONFIG_MERCHANT_AVAILABLE_TERMS_TS, time() - 901);
+        Configuration::updateValue(
+            Twopayment::CONFIG_MERCHANT_AVAILABLE_TERMS_TS,
+            time() - Twopayment::MERCHANT_AVAILABLE_TERMS_TTL - 1
+        );
         $module->responses[] = ['http_status' => 200, 'available_terms' => []];
         TinyAssert::same([], $module->getMerchantAvailableTerms(true));
     }
@@ -5046,7 +5052,10 @@ final class OrderBuilderSpec
         self::reset();
         // No merchant id / API key: no fetch even on refresh with an expired TTL
         // and a queued response.
-        Configuration::updateValue(Twopayment::CONFIG_MERCHANT_AVAILABLE_TERMS_TS, time() - 901);
+        Configuration::updateValue(
+            Twopayment::CONFIG_MERCHANT_AVAILABLE_TERMS_TS,
+            time() - Twopayment::MERCHANT_AVAILABLE_TERMS_TTL - 1
+        );
         $module = self::fetchHarness();
         $module->responses[] = ['http_status' => 200, 'available_terms' => [7]];
         $module->getMerchantAvailableTerms(true);
@@ -5658,6 +5667,9 @@ require __DIR__ . '/BuyerCountryGateSpec.php';
 require __DIR__ . '/TwoRateLimiterSpec.php';
 require __DIR__ . '/AdminFirewallRateLimitFieldsSpec.php';
 require __DIR__ . '/DefaultShippingTaxCodeSpec.php';
+require __DIR__ . '/EomTermTypeVisibilitySpec.php';
+require __DIR__ . '/IntentDeclinedNoticeSpec.php';
+require __DIR__ . '/MerchantRecordRefreshPolicySpec.php';
 
 $tests = [
     'OrderBuilderSpec::runAll' => [OrderBuilderSpec::class, 'runAll'],
@@ -5713,6 +5725,9 @@ $tests = [
     'TwoRateLimiterSpec::runAll' => [TwoRateLimiterSpec::class, 'runAll'],
     'AdminFirewallRateLimitFieldsSpec::runAll' => [AdminFirewallRateLimitFieldsSpec::class, 'runAll'],
     'DefaultShippingTaxCodeSpec::runAll' => [DefaultShippingTaxCodeSpec::class, 'runAll'],
+    'EomTermTypeVisibilitySpec::runAll' => [EomTermTypeVisibilitySpec::class, 'runAll'],
+    'IntentDeclinedNoticeSpec::runAll' => [IntentDeclinedNoticeSpec::class, 'runAll'],
+    'MerchantRecordRefreshPolicySpec::runAll' => [MerchantRecordRefreshPolicySpec::class, 'runAll'],
 ];
 
 $failed = 0;

@@ -512,3 +512,12 @@ $_MODULE['<{twopayment}prestashop>twopayment_1e0bf2fd8c2dc505dc11f1cbf7b2172e'] 
 $_MODULE['<{twopayment}prestashop>twopayment_4009e05973e240e0ae89bfb77b847115'] = 'Headere IT-administratoren din ber deg legge til. Hver av dem sendes på alle kall denne butikken gjør til %s-API-et fra serveren din.';
 $_MODULE['<{twopayment}prestashop>twopayment_b42b57d56d7d5c1b63351f4d87e396c0'] = 'Kryss av for "Send også fra nettleseren" bare der IT-administratoren din krever headeren også for kall fra kjøperens nettleser: verdien til den headeren vil bli publisert til kjøperens nettleser og kan leses av hvem som helst.';
 $_MODULE['<{twopayment}prestashop>twopayment_1063e38cb53d94d386f21227fcd84717'] = 'Fjern';
+$_MODULE['<{twopayment}prestashop>twopayment_1a4b2efd8f0a1e7960d1a59d50cdb257'] = 'Selgerprofil';
+$_MODULE['<{twopayment}prestashop>twopayment_edf7cab6774c06c8bd6e550736a989c4'] = 'Betalingsbetingelsene du kan tilby, kjøpergebyrsatsene, minste ordreverdi og standardbetingelsen hentes fra %s og mellomlagres. De oppdateres hver natt og hver gang API-nøkkelen eller miljøet lagres; bruk denne for å hente inn en endring nå.';
+$_MODULE['<{twopayment}prestashop>twopayment_613ef0108fe785be3eae70f1a6fbaa7d'] = 'Oppdater selgerprofil';
+$_MODULE['<{twopayment}prestashop>twopayment_b0c201fcef3e7041528d70ad1b723830'] = 'URL for nattlig oppdatering';
+$_MODULE['<{twopayment}prestashop>twopayment_1b8c0eee6f6c6adef99438af3b7306ca'] = 'Kall denne én gang per døgn fra crontab på serveren din for å oppdatere selgerprofilen om natten. Tokenet kan i stedet sendes som en X-Two-Cron-Token-header eller et POST-felt, slik at det holdes utenfor prosesslister og proxylogger. Hold det hemmelig; alle som har det kan utløse oppdateringen. Ved en multistore-installasjon planlegger du én linje per butikk. Mens butikken er i vedlikeholdsmodus må du legge inn IP-adressen til serveren som kaller under Butikkparametere > Vedlikehold, ellers får denne URL-en vedlikeholdssiden i stedet.';
+$_MODULE['<{twopayment}prestashop>twopayment_02fba029778633dc93f02b8b19bef06b'] = 'Selgerprofilen er oppdatert.';
+$_MODULE['<{twopayment}prestashop>twopayment_94d02e855271d883489bea55a0ae9b2a'] = 'Kunne ikke oppdatere selgerprofilen - den tidligere mellomlagrede profilen er fortsatt i bruk. Kontroller at API-nøkkelen verifiseres og at %s er tilgjengelig.';
+$_MODULE['<{twopayment}prestashop>configuration_5c123dffc87233456030f3762f15c3f2'] = 'Oppdaterer…';
+$_MODULE['<{twopayment}prestashop>configuration_0a3ec356996cae21088be407cab8ec8c'] = 'Kunne ikke nå serveren. Prøv igjen.';

@@ -168,6 +168,41 @@ Notes:
 - Selecting a group that is later deleted is treated as "not set" — the order is refused, not relayed at 0%.
 - Every order that actually uses the fallback writes a warning to the shop log naming the group, its id and the resolved rate, e.g. `assuming the configured Default shipping tax code "IVA 21%" (tax_rules_group=12, rate=21%)`. If you never see that line, the fallback is not being used.
 
+### Merchant profile refresh
+
+Your offerable payment terms, buyer-surcharge rates, minimum order value and default term are read from Two's merchant record and cached in the shop's configuration. Checkout and admin pages read that cache and never block on the API.
+
+The cache is replaced when:
+
+- it is empty — a fresh install, or the first page view after it was cleared;
+- the API key or the environment is saved;
+- the nightly refresh runs (below);
+- **Refresh merchant profile** is clicked, in **Module Configuration → Diagnostics**.
+
+On the nightly, button and expiry paths a failed refresh leaves the previously cached record in place, so the shop keeps trading on the last known good values. Saving a **new** API key or environment is the exception: the old record describes a merchant this shop is no longer, so it is cleared before the refetch and the shop has no cached record until one succeeds. A 24-hour expiry bounds how stale the record can get if none of the above fires.
+
+#### Nightly refresh
+
+PrestaShop schedules nothing on a module's behalf, so the nightly refresh is a URL your server's crontab calls. Copy it from **Nightly refresh URL** in **Module Configuration → Diagnostics** and add one line to the crontab of the user that owns the shop:
+
+```
+0 3 * * * curl -fsS -o /dev/null 'https://your-shop.example/module/twopayment/cron?token=YOUR_TOKEN'
+```
+
+The token is the only thing guarding the endpoint — treat it as a credential. A request without it, or with the wrong one, gets a 403; rejections are logged at most once an hour, so a scanner cannot flood the shop log.
+
+Accepted calls are floored at **one refresh per 15 minutes**: anything sooner gets a 429 and does no work, so holding the token cannot drive one blocking outbound request per call. A once-a-day cron never reaches the floor.
+
+To keep the token out of process listings and proxy access logs, send it as a header or a POST field instead of in the query string:
+
+```
+0 3 * * * curl -fsS -o /dev/null -H 'X-Two-Cron-Token: YOUR_TOKEN' 'https://your-shop.example/module/twopayment/cron'
+```
+
+**Multistore:** the cached record is per shop context, which the URL's own domain resolves — so schedule **one line per shop**, each with that shop's URL from its own Diagnostics tab. The token follows PrestaShop's configuration scoping: one minted in the all-shops context is shared by every shop, a shop-context mint is that shop's own.
+
+**Maintenance mode:** PrestaShop serves the maintenance page before a module front controller runs, so while the shop is closed this URL does nothing unless the calling server's IP is listed under **Shop Parameters → General → Maintenance**.
+
 ## Payment Terms: Standard vs End-of-Month (EOM)
 
 The module supports two types of payment terms to match your B2B invoicing practices:
@@ -189,6 +224,8 @@ Payment is due **X days from the fulfillment date**.
 - Easy for buyers to understand
 
 ### End-of-Month (EOM) Payment Terms
+
+EOM is not part of the general rollout, so the **Payment terms type** selector is only shown on a shop already configured for EOM — one whose stored term type is `EOM`. On every other shop the field is absent and terms are Standard. Saving **Standard terms** switches the shop back and the selector disappears with it; a later configuration write of `EOM` brings it back.
 
 Payment is due at the **end of the current month (at fulfillment) plus X days**.
 

@@ -512,3 +512,12 @@ $_MODULE['<{twopayment}prestashop>twopayment_1e0bf2fd8c2dc505dc11f1cbf7b2172e'] 
 $_MODULE['<{twopayment}prestashop>twopayment_4009e05973e240e0ae89bfb77b847115'] = 'Headers som din IT-administratör ber dig lägga till. Var och en skickas i alla anrop denna butik gör till %s-API:et från din server.';
 $_MODULE['<{twopayment}prestashop>twopayment_b42b57d56d7d5c1b63351f4d87e396c0'] = 'Markera "Skicka även från webbläsaren" endast där din IT-administratör kräver headern även för anrop från köparens webbläsare: värdet för den headern publiceras till köparens webbläsare och kan läsas av vem som helst.';
 $_MODULE['<{twopayment}prestashop>twopayment_1063e38cb53d94d386f21227fcd84717'] = 'Ta bort';
+$_MODULE['<{twopayment}prestashop>twopayment_1a4b2efd8f0a1e7960d1a59d50cdb257'] = 'Handlarprofil';
+$_MODULE['<{twopayment}prestashop>twopayment_edf7cab6774c06c8bd6e550736a989c4'] = 'De betalningsvillkor du kan erbjuda, köparavgiftssatserna, minsta ordervärde och standardvillkoret hämtas från %s och cachas. De uppdateras varje natt och varje gång API-nyckeln eller miljön sparas; använd denna för att hämta in en ändring nu.';
+$_MODULE['<{twopayment}prestashop>twopayment_613ef0108fe785be3eae70f1a6fbaa7d'] = 'Uppdatera handlarprofil';
+$_MODULE['<{twopayment}prestashop>twopayment_b0c201fcef3e7041528d70ad1b723830'] = 'URL för nattlig uppdatering';
+$_MODULE['<{twopayment}prestashop>twopayment_1b8c0eee6f6c6adef99438af3b7306ca'] = 'Anropa denna en gång per dygn från crontab på din server för att uppdatera handlarprofilen över natten. Token kan i stället skickas som en X-Two-Cron-Token-header eller ett POST-fält, vilket håller den utanför processlistor och proxyloggar. Håll den hemlig; alla som har den kan utlösa uppdateringen. Vid en multistore-installation schemalägger du en rad per butik. När butiken är i underhållsläge måste du lägga till den anropande serverns IP under Butiksparametrar > Underhåll, annars visas underhållssidan för denna URL i stället.';
+$_MODULE['<{twopayment}prestashop>twopayment_02fba029778633dc93f02b8b19bef06b'] = 'Handlarprofilen har uppdaterats.';
+$_MODULE['<{twopayment}prestashop>twopayment_94d02e855271d883489bea55a0ae9b2a'] = 'Kunde inte uppdatera handlarprofilen - den tidigare cachade profilen används fortfarande. Kontrollera att API-nyckeln verifieras och att %s är nåbar.';
+$_MODULE['<{twopayment}prestashop>configuration_5c123dffc87233456030f3762f15c3f2'] = 'Uppdaterar…';
+$_MODULE['<{twopayment}prestashop>configuration_0a3ec356996cae21088be407cab8ec8c'] = 'Kunde inte nå servern. Försök igen.';
